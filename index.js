@@ -1,5 +1,6 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion } = require("mongodb");
+const { templatesCollection, connectDB } = require("./constants");
 require("dotenv").config();
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.hdemiyo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -12,7 +13,6 @@ const client = new MongoClient(uri, {
 });
 
 const app = express();
-
 app.use(express.json());
 
 const port = process.env.PORT || 5000;
@@ -24,12 +24,7 @@ app.get("/", async (req, res) => {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
-    const templatesCollection = await client
-      .db("templatehearth")
-      .collection("templates");
+    connectDB();
 
     app.get("/templates", async (req, res) => {
       const templates = await templatesCollection.find({}).toArray();
@@ -75,8 +70,6 @@ async function run() {
               note: "The build output will be in the dist folder.",
             },
           ];
-
-          // console.log(blog);
 
           res.send(blog);
         }
