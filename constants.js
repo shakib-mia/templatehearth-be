@@ -1,4 +1,3 @@
-// // constants.js
 const { MongoClient, ServerApiVersion } = require("mongodb");
 require("dotenv").config();
 
@@ -12,18 +11,26 @@ const client = new MongoClient(uri, {
   },
 });
 
+let templatesCollection = null;
+
 async function connectDB() {
   if (!client.topology || !client.topology.isConnected()) {
     await client.connect();
+    const db = client.db("templatehearth");
+    templatesCollection = db.collection("templates");
     console.log("✅ Connected to MongoDB");
   }
 }
 
-const db = client.db("templatehearth");
-const templatesCollection = db.collection("templates");
+// ✅ Lazy getter
+function getTemplatesCollection() {
+  if (!templatesCollection) {
+    throw new Error("❌ Database not connected yet. Call connectDB() first.");
+  }
+  return templatesCollection;
+}
 
 module.exports = {
-  client,
   connectDB,
-  templatesCollection,
+  getTemplatesCollection,
 };
