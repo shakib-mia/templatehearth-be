@@ -87,11 +87,11 @@ async function run() {
     });
   } finally {
     // Ensures that the client will close when you finish/error
-    // await client.close();
+    await client.close();
   }
 }
 run().catch(console.dir);
 
-// app.listen(port, () => console.log(`listening on port: ${port}`));
+app.listen(port, () => console.log(`listening on port: ${port}`));
 
-module.exports = app;
+// module.exports = app;
