@@ -1,6 +1,6 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion } = require("mongodb");
-const { templatesCollection, connectDB } = require("./constants");
+const { templatesCollection } = require("./constants");
 require("dotenv").config();
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.hdemiyo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -24,7 +24,9 @@ app.get("/", async (req, res) => {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    connectDB();
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    // await client.db("admin").command({ ping: 1 });
 
     app.get("/templates", async (req, res) => {
       const templates = await templatesCollection.find({}).toArray();
