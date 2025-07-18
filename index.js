@@ -80,9 +80,8 @@ async function run() {
         res.status(500).send({ error: "Internal Server Error" });
       }
     });
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+  } catch (err) {
+    console.log(err);
   }
 }
 run().catch(console.dir);
