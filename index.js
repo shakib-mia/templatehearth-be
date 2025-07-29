@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
 require("dotenv").config();
@@ -14,6 +15,11 @@ const client = new MongoClient(uri, {
 
 const app = express();
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 const port = process.env.PORT || 5000;
 
@@ -29,6 +35,7 @@ async function run() {
     // await client.db("admin").command({ ping: 1 });
     const db = client.db("templatehearth");
     const templatesCollection = db.collection("templates");
+    const newslettersCollection = db.collection("newsletters");
 
     app.get("/templates", async (req, res) => {
       const templates = await templatesCollection.find({}).toArray();
@@ -79,6 +86,26 @@ async function run() {
         }
       } catch (error) {
         console.error("Error fetching blog by slug:", error);
+        res.status(500).send({ error: "Internal Server Error" });
+      }
+    });
+
+    app.post("/newsletter", async (req, res) => {
+      // console.log();
+      const insertCursor = await newslettersCollection.insertOne({
+        email: req.body.email,
+        timestamp: Math.floor(Date.now()),
+      });
+
+      res.send(insertCursor);
+    });
+
+    app.get("/newsletter", async (req, res) => {
+      try {
+        const newsletters = await newslettersCollection.find({}).toArray();
+        res.send(newsletters);
+      } catch (error) {
+        console.error("Error fetching newsletters:", error);
         res.status(500).send({ error: "Internal Server Error" });
       }
     });
