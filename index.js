@@ -36,9 +36,15 @@ async function run() {
     const db = client.db("templatehearth");
     const templatesCollection = db.collection("templates");
     const newslettersCollection = db.collection("newsletters");
+    const blogsCollection = db.collection("blogs");
 
     app.get("/templates", async (req, res) => {
-      const templates = await templatesCollection.find({}).toArray();
+      const templates = await templatesCollection
+        .find(
+          {},
+          { projection: { image: 1, headline: 1, shortDescription: 1 } }
+        )
+        .toArray();
       res.send(templates);
     });
 
@@ -87,6 +93,37 @@ async function run() {
       } catch (error) {
         console.error("Error fetching blog by slug:", error);
         res.status(500).send({ error: "Internal Server Error" });
+      }
+    });
+
+    app.get("/blogs", async (req, res) => {
+      let blogs;
+      if (req.headers.route === "/") {
+        blogs = await blogsCollection.find({}).limit(4).toArray();
+      } else {
+        blogs = await blogsCollection.find({}).toArray();
+      }
+      res.send(blogs);
+    });
+
+    app.get("/blogs/:slug", async (req, res) => {
+      const { slug } = req.params;
+      const blog = await blogsCollection.findOne({ slug });
+      res.send(blog);
+    });
+
+    app.get("/rest-blogs/:slug", async (req, res) => {
+      try {
+        const slug = req.params.slug;
+
+        const restBlogs = await blogsCollection
+          .find({ slug: { $ne: slug } }) // not equal to the given slug
+          .toArray();
+
+        res.status(200).send(restBlogs);
+      } catch (error) {
+        console.error("Error fetching rest blogs:", error);
+        res.status(500).send({ error: "Something went wrong!" });
       }
     });
 
