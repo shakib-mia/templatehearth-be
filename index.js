@@ -42,7 +42,9 @@ async function run() {
       const templates = await templatesCollection
         .find(
           {},
-          { projection: { image: 1, headline: 1, shortDescription: 1 } }
+          {
+            projection: { image: 1, headline: 1, shortDescription: 1, slug: 1 },
+          }
         )
         .toArray();
       res.send(templates);
