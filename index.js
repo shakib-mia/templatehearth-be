@@ -37,6 +37,7 @@ async function run() {
     const templatesCollection = db.collection("templates");
     const newslettersCollection = db.collection("newsletters");
     const blogsCollection = db.collection("blogs");
+    const servicesCollection = db.collection("services");
 
     app.get("/templates", async (req, res) => {
       const templates = await templatesCollection
@@ -148,12 +149,31 @@ async function run() {
         res.status(500).send({ error: "Internal Server Error" });
       }
     });
+
+    app.get("/services", async (req, res) => {
+      let services;
+      if (req.headers.route === "/") {
+        services = await servicesCollection.find({}).limit(6).toArray();
+      } else {
+        services = await servicesCollection.find({}).toArray();
+      }
+      res.send(services);
+    });
+
+    app.get("/services/:slug", async (req, res) => {
+      const { slug } = req.params;
+
+      const service = await servicesCollection.findOne({ slug });
+      res.send(service);
+    });
+
+    // app.post("/giveaway/:slug", async (req, res) => {});
   } catch (err) {
     console.log(err);
   }
 }
 run().catch(console.dir);
 
-app.listen(port, () => console.log(`listening on port: ${port}`));
+app.listen(port, () => console.log(`http://localhost:${port}`));
 
 // module.exports = app;
