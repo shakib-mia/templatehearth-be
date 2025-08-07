@@ -178,36 +178,6 @@ async function run() {
       }
     });
 
-    app.get("/services", async (req, res) => {
-      const services = await servicesCollection
-        .find(
-          {},
-          {
-            projection: { image: 1, headline: 1, shortDescription: 1, slug: 1 },
-          }
-        )
-        .toArray();
-
-      console.log(services);
-      res.send(services);
-    });
-
-    app.get("/services/:slug", async (req, res) => {
-      try {
-        const service = await servicesCollection.findOne({
-          slug: req.params.slug,
-        });
-
-        if (!service) {
-          return res.status(404).send({ error: "Service not found" });
-        }
-        res.send(service);
-      } catch (error) {
-        console.error("Error fetching service by slug:", error);
-        res.status(500).send({ error: "Internal Server Error" });
-      }
-    });
-
     app.get("/blogs", async (req, res) => {
       let blogs;
       if (req.headers.route === "/") {
