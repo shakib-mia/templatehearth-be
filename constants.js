@@ -13,17 +13,18 @@ const client = new MongoClient(uri, {
 
 let templatesCollection = null;
 
-async function connectDB() {
+async function connectDB(name) {
   if (!client.topology || !client.topology.isConnected()) {
     await client.connect();
     const db = client.db("templatehearth");
-    templatesCollection = db.collection("templates");
+    templatesCollection = db.collection(name);
     console.log("✅ Connected to MongoDB");
   }
 }
 
 // ✅ Lazy getter
-function getTemplatesCollection() {
+async function getTemplatesCollection(name) {
+  await connectDB(name);
   if (!templatesCollection) {
     throw new Error("❌ Database not connected yet. Call connectDB() first.");
   }
