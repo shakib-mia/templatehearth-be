@@ -155,7 +155,7 @@ async function run() {
         .find(
           {},
           {
-            projection: { image: 1, headline: 1, shortDescription: 1, slug: 1 },
+            projection: { image: 1, title: 1, shortDescription: 1, slug: 1 },
           }
         )
         .toArray();
@@ -179,13 +179,13 @@ async function run() {
     });
 
     app.get("/blogs", async (req, res) => {
-      let blogs;
+      let logicalBlogs;
       if (req.headers.route === "/") {
-        blogs = await blogsCollection.find({}).limit(4).toArray();
+        logicalBlogs = await blogsCollection.find({}).limit(4).toArray();
       } else {
-        blogs = await blogsCollection.find({}).toArray();
+        logicalBlogs = await blogsCollection.find({}).toArray();
       }
-      res.send(blogs);
+      res.send(logicalBlogs);
     });
 
     app.get("/blogs/:slug", async (req, res) => {
