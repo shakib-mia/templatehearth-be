@@ -13,6 +13,8 @@ router.get("/", async (req, res) => {
       }
     )
     .toArray();
+
+  console.log(services);
   res.send(services);
 });
 

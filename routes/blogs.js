@@ -5,7 +5,7 @@ const router = require("express").Router();
 
 router.get("/", async (req, res) => {
   const blogsCollection = await getTemplatesCollection("blogs");
-  const templates = await blogsCollection
+  const blogs = await blogsCollection
     .find(
       {},
       {
@@ -13,14 +13,14 @@ router.get("/", async (req, res) => {
       }
     )
     .toArray();
-  res.send(templates);
+  res.send(blogs);
 });
 
 router.get("/:slug", async (req, res) => {
-  const templatesCollection = await getTemplatesCollection("blogs");
+  const blogsCollection = await getTemplatesCollection("blogs");
 
   try {
-    const blog = await templatesCollection.findOne({
+    const blog = await blogsCollection.findOne({
       slug: req.params.slug,
     });
 
