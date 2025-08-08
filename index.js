@@ -151,15 +151,13 @@ async function run() {
     });
 
     app.get("/blogs", async (req, res) => {
-      const blogs = await blogsCollection
-        .find(
-          {},
-          {
-            projection: { image: 1, title: 1, shortDescription: 1, slug: 1 },
-          }
-        )
-        .toArray();
-      res.send(blogs);
+      let logicalBlogs;
+      if (req.headers.route === "/") {
+        logicalBlogs = await blogsCollection.find({}).limit(4).toArray();
+      } else {
+        logicalBlogs = await blogsCollection.find({}).toArray();
+      }
+      res.send(logicalBlogs);
     });
 
     app.get("/blogs/:slug", async (req, res) => {
@@ -176,16 +174,6 @@ async function run() {
         console.error("Error fetching blog by slug:", error);
         res.status(500).send({ error: "Internal Server Error" });
       }
-    });
-
-    app.get("/blogs", async (req, res) => {
-      let logicalBlogs;
-      if (req.headers.route === "/") {
-        logicalBlogs = await blogsCollection.find({}).limit(4).toArray();
-      } else {
-        logicalBlogs = await blogsCollection.find({}).toArray();
-      }
-      res.send(logicalBlogs);
     });
 
     app.get("/blogs/:slug", async (req, res) => {
