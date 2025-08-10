@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div
+      style="
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f9;
+        padding: 20px;
+      "
+    >
+      <div
+        style="
+          max-width: 600px;
+          margin: auto;
+          background-color: #ffffff;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          overflow: hidden;
+        "
+      >
+        <div
+          style="
+            background-color: #7f00e1;
+            color: #ffffff;
+            padding: 16px 24px;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+          "
+        >
+          Template Hearth
+        </div>
+        <div
+          style="
+            padding: 24px;
+            color: #171717;
+            font-size: 16px;
+            line-height: 1.5;
+          "
+        >
+          <p>Dear <strong>${name}</strong>,</p>
+          <p>
+            Thank you for contacting Template Hearth. We have received your
+            message regarding <strong>${subject}</strong>.
+          </p>
+
+          <p><strong>Your Message:</strong></p>
+          <pre
+            style="
+              background-color: #faf7fd;
+              padding: 12px;
+              border-radius: 4px;
+              white-space: pre-wrap;
+              color: #171717;
+              font-family: inherit;
+              font-size: 15px;
+            "
+          >
+${message}
+      </pre
+          >
+
+          <p>
+            Our team will review your inquiry and get back to you as soon as
+            possible.
+          </p>
+          <hr
+            style="border: none; border-top: 1px solid #e5d9f2; margin: 24px 0"
+          />
+          <p style="margin-top: 24px">
+            Best regards,<br />The Template Hearth Team
+          </p>
+        </div>
+        <div
+          style="
+            background-color: #f1f5f9;
+            color: #7f00e1;
+            font-size: 12px;
+            padding: 12px 24px;
+            text-align: center;
+          "
+        >
+          &copy; ${new Date().getFullYear()} Template Hearth. All rights
+          reserved.
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -4,6 +4,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 const contact = require("./routes/contact");
 const templates = require("./routes/templates");
 const { connectDB } = require("./constants");
+const nodemailer = require("nodemailer");
 
 require("dotenv").config();
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.hdemiyo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -232,6 +233,65 @@ async function run() {
 
       const service = await servicesCollection.findOne({ slug });
       res.send(service);
+    });
+
+    app.post("/contact", async (req, res) => {
+      const { name, email, subject, message } = req.body;
+
+      if (!name || !email || !subject || !message) {
+        return res.status(400).json({ error: "All fields are required" });
+      }
+
+      try {
+        // Create transporter
+        let transporter = nodemailer.createTransport({
+          service: "gmail", // Gmail use করছো ধরেই নিচ্ছি
+          auth: {
+            user: process.env.EMAIL_USER, // তোমার Gmail address
+            pass: process.env.EMAIL_PASS, // Gmail app password বা normal password
+          },
+        });
+
+        // Mail options
+        let mailOptions = {
+          from: `"Template Hearth" <${process.env.EMAIL_USER}>`,
+          to: email,
+          subject: `Re: ${subject}`,
+          html: `<div style="font-family: Arial, sans-serif; background-color: #f7f7f9; padding: 20px;">
+                  <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+                    <div style="background-color: #7f00e1; color: #ffffff; padding: 16px 24px; font-size: 22px; font-weight: bold; text-align: center;">
+                      Template Hearth
+                    </div>
+                    <div style="padding: 24px; color: #171717; font-size: 16px; line-height: 1.5;">
+                      <p>Dear <strong>${name}</strong>,</p>
+                      <p>Thank you for reaching out to Template Hearth. We have received your message regarding <strong>${subject}</strong>.</p>
+
+                      <p><strong>Your Message:</strong></p>
+                      <pre style="background-color: #faf7fd; padding: 12px; border-radius: 4px; white-space: pre-wrap; color: #171717; font-family: inherit; font-size: 15px;">
+                      ${message}
+                      </pre>
+
+                      <p>Our team is currently reviewing your inquiry and will get back to you as soon as possible—usually within 24-48 hours.</p>
+                      <p>If you have any urgent questions, feel free to reply to this email or contact us directly at <a href="mailto:templatehearth@gmail.com">templatehearth@gmail.com</a>.</p>
+                      <p>Thank you for choosing Template Hearth. We look forward to assisting you!</p>
+                      <hr style="border: none; border-top: 1px solid #e5d9f2; margin: 24px 0;" />
+                      <p style="margin-top: 24px;">Best regards,<br />The Template Hearth Team</p>
+                    </div>
+                    <div style="background-color: #f1f5f9; color: #7f00e1; font-size: 12px; padding: 12px 24px; text-align: center;">
+                      &copy; ${new Date().getFullYear()} Template Hearth. All rights reserved.
+                    </div>
+                  </div>
+                </div>`,
+        };
+
+        // Send mail
+        let info = await transporter.sendMail(mailOptions);
+
+        res.status(200).json({ message: "Email sent successfully", info });
+      } catch (error) {
+        console.error("Error sending email: ", error);
+        res.status(500).json({ error: "Failed to send email" });
+      }
     });
 
     // app.post("/giveaway/:slug", async (req, res) => {});
