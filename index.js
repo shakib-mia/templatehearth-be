@@ -151,6 +151,21 @@ async function run() {
       }
     });
 
+    app.get("/rest-templates/:slug", async (req, res) => {
+      try {
+        const slug = req.params.slug;
+
+        const restTemplates = await templatesCollection
+          .find({ slug: { $ne: slug } }) // not equal to the given slug
+          .toArray();
+
+        res.status(200).send(restTemplates);
+      } catch (error) {
+        console.error("Error fetching rest blogs:", error);
+        res.status(500).send({ error: "Something went wrong!" });
+      }
+    });
+
     app.get("/blogs", async (req, res) => {
       let logicalBlogs;
       if (req.headers.route === "/") {
