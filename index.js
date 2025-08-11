@@ -250,6 +250,21 @@ async function run() {
       res.send(service);
     });
 
+    app.get("/rest-services/:slug", async (req, res) => {
+      try {
+        const slug = req.params.slug;
+
+        const services = await servicesCollection
+          .find({ slug: { $ne: slug } }) // not equal to the given slug
+          .toArray();
+
+        res.status(200).send(services);
+      } catch (error) {
+        console.error("Error fetching rest blogs:", error);
+        res.status(500).send({ error: "Something went wrong!" });
+      }
+    });
+
     app.post("/contact", async (req, res) => {
       const { name, email, subject, message } = req.body;
 
