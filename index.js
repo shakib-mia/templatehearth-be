@@ -214,13 +214,36 @@ async function run() {
     });
 
     app.post("/newsletter", async (req, res) => {
-      // console.log();
-      const insertCursor = await newslettersCollection.insertOne({
-        email: req.body.email,
-        timestamp: Math.floor(Date.now()),
-      });
+      try {
+        const email = req.body.email;
 
-      res.send(insertCursor);
+        if (!email) {
+          return res.status(400).send({ message: "Email is required" });
+        }
+
+        // Check if the email already exists
+        const existingEmail = await newslettersCollection.findOne({
+          email: email,
+        });
+
+        if (existingEmail) {
+          // Email already subscribed
+          return res
+            .status(409)
+            .send({ message: "Email is already subscribed" });
+        }
+
+        // Insert new email
+        const insertResult = await newslettersCollection.insertOne({
+          email: email,
+          timestamp: Math.floor(Date.now()),
+        });
+
+        res.status(201).send(insertResult);
+      } catch (error) {
+        console.error("Error inserting email:", error);
+        res.status(500).send({ message: "Internal Server Error" });
+      }
     });
 
     app.get("/newsletter", async (req, res) => {
