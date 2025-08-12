@@ -221,13 +221,11 @@ async function run() {
           return res.status(400).send({ message: "Email is required" });
         }
 
-        // Check if the email already exists
+        // Check if already exists
         const existingEmail = await newslettersCollection.findOne({
           email: email,
         });
-
         if (existingEmail) {
-          // Email already subscribed
           return res
             .status(409)
             .send({ message: "Email is already subscribed" });
@@ -239,9 +237,65 @@ async function run() {
           timestamp: Math.floor(Date.now()),
         });
 
-        res.status(201).send(insertResult);
+        /** --------------------------
+         *  Send Email Notifications
+         * -------------------------- */
+
+        // Create transporter
+        let transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        });
+
+        // Mail to subscriber
+        let subscriberMail = {
+          from: `"Template Hearth" <${process.env.EMAIL_USER}>`,
+          to: email,
+          subject: "Welcome to Template Hearth Newsletter",
+          html: `
+        <div style="font-family: Arial, sans-serif; background-color: #f7f7f9; padding: 20px;">
+          <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+            <div style="background-color: #7f00e1; color: #ffffff; padding: 16px; font-size: 22px; font-weight: bold; text-align: center;">
+              Template Hearth Newsletter
+            </div>
+            <div style="padding: 24px; color: #171717; font-size: 16px;">
+              <p>Hi there!</p>
+              <p>Thank you for subscribing to our newsletter. You'll now receive updates, new templates, and exclusive offers straight to your inbox.</p>
+              <p>Stay tuned! 🚀</p>
+            </div>
+            <div style="background-color: #f1f5f9; color: #7f00e1; font-size: 12px; padding: 12px; text-align: center;">
+              &copy; ${new Date().getFullYear()} Template Hearth. All rights reserved.
+            </div>
+          </div>
+        </div>
+      `,
+        };
+
+        // Mail to admin
+        let adminMail = {
+          from: `"Template Hearth" <${process.env.EMAIL_USER}>`,
+          to: process.env.EMAIL_USER, // Admin email
+          subject: "New Newsletter Subscriber",
+          html: `
+        <p>New subscriber added:</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
+      `,
+        };
+
+        // Send both mails
+        await transporter.sendMail(subscriberMail);
+        await transporter.sendMail(adminMail);
+
+        res.status(201).send({
+          message: "Subscribed successfully and emails sent",
+          data: insertResult,
+        });
       } catch (error) {
-        console.error("Error inserting email:", error);
+        console.error("Error in /newsletter:", error);
         res.status(500).send({ message: "Internal Server Error" });
       }
     });
