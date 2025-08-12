@@ -278,12 +278,43 @@ async function run() {
         let adminMail = {
           from: `"Template Hearth" <${process.env.EMAIL_USER}>`,
           to: process.env.EMAIL_USER, // Admin email
-          subject: "New Newsletter Subscriber",
+          subject: "📢 New Newsletter Subscriber",
           html: `
-        <p>New subscriber added:</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
-      `,
+    <div style="font-family: Arial, sans-serif; background-color: #f7f7f9; padding: 20px;">
+      <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+        
+        <!-- Header -->
+        <div style="background-color: #7f00e1; color: #ffffff; padding: 16px 24px; font-size: 20px; font-weight: bold; text-align: center;">
+          New Newsletter Subscriber
+        </div>
+
+        <!-- Body -->
+        <div style="padding: 24px; color: #171717; font-size: 16px; line-height: 1.5;">
+          <p>Hi Admin,</p>
+          <p>A new user has subscribed to the <strong>Template Hearth Newsletter</strong>.</p>
+
+          <table style="width: 100%; border-collapse: collapse; margin-top: 12px;">
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e5d9f2; background-color: #faf7fd;"><strong>Email</strong></td>
+              <td style="padding: 8px; border: 1px solid #e5d9f2;">${email}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e5d9f2; background-color: #faf7fd;"><strong>Subscription Time</strong></td>
+              <td style="padding: 8px; border: 1px solid #e5d9f2;">${new Date().toLocaleString()}</td>
+            </tr>
+          </table>
+
+          <p style="margin-top: 20px;">Keep up the good work! 🚀</p>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color: #f1f5f9; color: #7f00e1; font-size: 12px; padding: 12px 24px; text-align: center;">
+          &copy; ${new Date().getFullYear()} Template Hearth. Internal Notification.
+        </div>
+
+      </div>
+    </div>
+  `,
         };
 
         // Send both mails
