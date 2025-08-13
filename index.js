@@ -43,16 +43,40 @@ async function run() {
     const servicesCollection = db.collection("services");
 
     app.get("/templates", async (req, res) => {
-      const templates = await templatesCollection
-        .find(
-          {},
-          {
-            projection: { image: 1, headline: 1, shortDescription: 1, slug: 1 },
-          }
-        )
-        .toArray();
+      if (req.headers.route === "/") {
+        const templates = await templatesCollection
+          .find(
+            {},
+            {
+              projection: {
+                image: 1,
+                headline: 1,
+                shortDescription: 1,
+                slug: 1,
+              },
+            }
+          )
+          .limit(4)
+          .toArray();
 
-      res.send(templates);
+        res.send(templates);
+      } else {
+        const templates = await templatesCollection
+          .find(
+            {},
+            {
+              projection: {
+                image: 1,
+                headline: 1,
+                shortDescription: 1,
+                slug: 1,
+              },
+            }
+          )
+          .toArray();
+
+        res.send(templates);
+      }
     });
 
     app.get("/templates/:slug", async (req, res) => {
@@ -234,6 +258,7 @@ async function run() {
         // Insert new email
         const insertResult = await newslettersCollection.insertOne({
           email: email,
+          template: req.body.template,
           timestamp: Math.floor(Date.now()),
         });
 
@@ -267,7 +292,7 @@ async function run() {
               <p>Stay tuned! 🚀</p>
             </div>
             <div style="background-color: #f1f5f9; color: #7f00e1; font-size: 12px; padding: 12px; text-align: center;">
-              &copy; ${new Date().getFullYear()} Template Hearth. All rights reserved.
+              &copy; ${new Date().getFullYear()} <a href="https://templatehearth.vercel.app/" target="_blank">Template Hearth</a>. All rights reserved.
             </div>
           </div>
         </div>
@@ -300,7 +325,14 @@ async function run() {
             </tr>
             <tr>
               <td style="padding: 8px; border: 1px solid #e5d9f2; background-color: #faf7fd;"><strong>Subscription Time</strong></td>
-              <td style="padding: 8px; border: 1px solid #e5d9f2;">${new Date().toLocaleString()}</td>
+              <td style="padding: 8px; border: 1px solid #e5d9f2;">${new Date().toLocaleDateString(
+                "en-GB",
+                {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                }
+              )}</td>
             </tr>
           </table>
 
