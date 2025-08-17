@@ -41,6 +41,7 @@ async function run() {
     const newslettersCollection = db.collection("newsletters");
     const blogsCollection = db.collection("blogs");
     const servicesCollection = db.collection("services");
+    const plansCollection = db.collection("plans");
 
     app.get("/templates", async (req, res) => {
       if (req.headers.route === "/") {
@@ -464,6 +465,11 @@ async function run() {
       }
     });
 
+    app.get("/plans", async (req, res) => {
+      const plans = await plansCollection.find({}).toArray();
+
+      res.send(plans);
+    });
     // app.post("/giveaway/:slug", async (req, res) => {});
   } catch (err) {
     console.log(err);

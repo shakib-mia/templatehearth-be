@@ -1,0 +1,137 @@
+{
+  "agency": {
+    "name": "YourAgencyName",
+    "stack": "Next.js + MERN",
+    "currency_defaults": {
+      "usd": "USD",
+      "bdt": "BDT",
+      "inr": "INR"
+    }
+  },
+  "pricing": {
+    "plans": [
+      {
+        "id": "landing_page",
+        "name": "Landing Page",
+        "tagline": "Single-page / Lead generation",
+        "price": {
+          "usd": 700,
+          "bdt": 25000,
+          "inr": 15000
+        },
+        "features": [
+          "1–3 pages with Next.js",
+          "Responsive design (Tailwind/Material UI)",
+          "SSR for SEO",
+          "Contact form / CTA integration",
+          "1 revision"
+        ],
+        "delivery_days": 5
+      },
+      {
+        "id": "starter_mp",
+        "name": "Starter Multipage Website",
+        "tagline": "Small business / personal portfolio",
+        "price": {
+          "usd": 1500,
+          "bdt": 55000,
+          "inr": 40000
+        },
+        "features": [
+          "4–6 pages with Next.js multipage routing",
+          "SSR for SEO",
+          "Responsive UI (Tailwind/Material UI)",
+          "Basic Express + MongoDB backend (forms/dynamic content)",
+          "1 revision"
+        ],
+        "delivery_days": 10
+      },
+      {
+        "id": "business_mp",
+        "name": "Business Website",
+        "tagline": "Custom CMS + Blog",
+        "price": {
+          "usd": 3500,
+          "bdt": 100000,
+          "inr": 75000
+        },
+        "features": [
+          "8–12 pages multipage Next.js site",
+          "Custom CMS / Admin panel",
+          "JWT / OAuth authentication",
+          "Blog system + image upload",
+          "API endpoints for content & lead management",
+          "2–3 revisions"
+        ],
+        "delivery_days": 25
+      },
+      {
+        "id": "ecommerce_mp",
+        "name": "Ecommerce Store",
+        "tagline": "SEO-friendly online store",
+        "price": {
+          "usd": 6500,
+          "bdt": 180000,
+          "inr": 130000
+        },
+        "features": [
+          "Product catalog with search & filter",
+          "Cart, checkout, payment integration",
+          "SSR pages for SEO",
+          "Role-based Admin Panel (products, orders, users)",
+          "Email automation & order tracking",
+          "Scalable backend APIs"
+        ],
+        "delivery_days": 45
+      },
+      {
+        "id": "custom_saas",
+        "name": "Custom Web App / SaaS",
+        "tagline": "Dashboards, marketplaces, SaaS",
+        "price": {
+          "usd": 18000,
+          "bdt": 500000,
+          "inr": 350000
+        },
+        "features": [
+          "Multi-tenant SaaS architecture",
+          "User roles & authentication",
+          "Real-time features (WebSocket/Socket.IO)",
+          "API integrations (Stripe, Slack, Zapier, etc.)",
+          "Advanced dashboards & analytics",
+          "CI/CD pipeline + Cloud deployment",
+          "Documentation + Testing"
+        ],
+        "delivery_days": 90
+      }
+    ],
+    "maintenance_plans": [
+      {
+        "id": "standard_care",
+        "name": "Standard Care",
+        "price": {
+          "usd": 400,
+          "bdt": 15000,
+          "inr": 11000
+        },
+        "features": ["Security patches", "Bug fixes", "Hosting support"]
+      },
+      {
+        "id": "advanced_care",
+        "name": "Advanced Care",
+        "price": {
+          "usd": 1000,
+          "bdt": 40000,
+          "inr": 30000
+        },
+        "features": [
+          "All Standard features",
+          "Continuous feature development",
+          "Performance optimization & scaling",
+          "SEO & monitoring"
+        ]
+      }
+    ],
+    "notes": "All prices are starting from. Final quotes depend on project scope. South Asia pricing is lower to match local budgets. Western pricing reflects premium custom MERN/Next.js work."
+  }
+}
